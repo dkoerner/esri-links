@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180" viewBox="0 0 320 180">
+  <rect width="320" height="180" fill="#e8eef1" rx="4"/>
+  <rect x="120" y="50" width="80" height="60" fill="#c4d0d6" rx="8"/>
+  <polygon points="160,58 190,98 130,98" fill="#a0b3bc"/>
+  <circle cx="185" cy="65" r="10" fill="#a0b3bc"/>
+  <text x="160" y="140" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#6e8a97">Replace thumbnail</text>
+</svg>

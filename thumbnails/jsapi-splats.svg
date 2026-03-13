@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180" viewBox="0 0 320 180">
+  <rect width="320" height="180" fill="#E8D4F0" rx="4"/>
+  <polygon points="100,110 160,50 220,110" fill="#A87CC0" opacity="0.5"/>
+  <polygon points="150,110 200,70 250,110" fill="#A87CC0" opacity="0.3"/>
+  <circle cx="240" cy="50" r="18" fill="#A87CC0" opacity="0.4"/>
+  <text x="160" y="150" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#6B4580">Gaussian splats</text>
+</svg>
