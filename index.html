@@ -3,91 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link Directory</title>
-    <link data-react-helmet="true" rel="icon" href="./favicon.svg" sizes="any" type="image/svg+xml">
-    <link data-react-helmet="true" rel="icon" href="./favicon.ico" sizes="48x48">
+    <title>Esri R&D Center Zurich | Kontaktparty 2026</title>
+    <link rel="icon" href="./favicon.svg" sizes="any" type="image/svg+xml">
+    <link rel="icon" href="./favicon.ico" sizes="48x48">
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/2.13.2/calcite.css" />
+    <script type="module" src="https://js.arcgis.com/calcite-components/2.13.2/calcite.esm.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif; /* Sets a readable typeface */
-            margin: 20px;
-            background-color: #F4F7F9;
-            color: #333;
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            background-color: var(--calcite-color-background);
+            color: var(--calcite-color-text-1);
+            font-family: var(--calcite-font-family);
         }
-        h1 {
-            color: #333;
+        .page {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 16px 24px;
+            box-sizing: border-box;
         }
-        ul {
-            list-style-type: none; /* Removes default list styling */
+        header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+        }
+        header img {
+            height: 36px;
+            width: auto;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: var(--calcite-color-text-1);
+        }
+
+        /* Main layout: sidebar + product grid */
+        .main {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 16px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        /* Left sidebar: contact card */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        .sidebar calcite-card {
+            height: 100%;
+        }
+        .qr-code {
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 8px auto 12px;
+            border-radius: var(--calcite-border-radius);
+        }
+        .contact-links {
+            list-style: none;
+            margin: 0;
             padding: 0;
         }
-        li {
-            margin: 8px 0;
+        .contact-links li {
+            margin: 0;
         }
-        a {
-            text-decoration: none; /* Removes underline from links */
-            color: #0056b3;
+        .contact-links a {
+            display: block;
+            padding: 5px 8px;
+            border-radius: var(--calcite-border-radius);
+            color: var(--calcite-color-brand);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: background-color 150ms;
         }
-        a:hover {
-            text-decoration: underline; /* Adds underline on hover for better user experience */
+        .contact-links a:hover {
+            background-color: var(--calcite-color-foreground-2);
         }
-        .category {
-            background-color: #CBD7D4;
-            border-left: 5px solid #B1C8C2;
-            margin: 10px 0;
-            padding: 10px 20px;
-            font-size: 20px;
+        .contact-links .secondary {
+            color: var(--calcite-color-text-3);
+            font-size: 0.75rem;
         }
-        .links {
-            padding-left: 20px;
-            background-color: #fff;
-            border-left: 3px solid #ccc;
-            margin-bottom: 10px;
+
+        /* Product grid: 2x2 */
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 16px;
+            min-height: 0;
+        }
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+        }
+        .product-card calcite-card {
+            height: 100%;
+            overflow: hidden;
+        }
+        /* Force the slotted content area inside calcite-card to scroll */
+        .product-card .thumb-grid {
+            max-height: calc(50vh - 100px);
+            padding-bottom: 16px;
+        }
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--calcite-color-text-1);
+        }
+
+        /* Thumbnail grid inside each product card */
+        .thumb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            overflow-y: auto;
+            padding: 4px 0;
+            flex: 1;
+            min-height: 0;
+            align-content: start;
+        }
+        .thumb-item {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            border-radius: var(--calcite-border-radius);
+            overflow: hidden;
+            transition: box-shadow 150ms, transform 150ms;
+            background: var(--calcite-color-foreground-1);
+            border: 1px solid var(--calcite-color-border-3);
+        }
+        .thumb-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            transform: translateY(-1px);
+        }
+        .thumb-item img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            display: block;
+        }
+        .thumb-item .thumb-label {
+            padding: 4px 6px;
+            font-size: 0.7rem;
+            color: var(--calcite-color-text-2);
+            line-height: 1.3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .empty-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            color: var(--calcite-color-text-3);
+            font-size: 0.85rem;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
-    <h1>Esri R&D Center - Kontaktparty 2026</h1>
+    <div class="page">
+        <header>
+            <img src="./favicon.svg" alt="Esri logo">
+            <h1>Esri R&D Center Zurich &mdash; Kontaktparty 2026</h1>
+        </header>
 
-    <div class="category">
-        Lets keep in touch!
-        <ul class="links">
-            <li><a href="https://arcg.is/1fCWHi2" target="_blank">Contact form</a><a href="./survey.html" target="_blank">(QR code)</a></li>
-            <li><a href="https://www.esri.com/en-us/about/about-esri/zurich-rd" target="_blank">Esri R&D center homepage</a></li>
-            <li><a href="https://www.esri.com/en-us/about/careers/job-search?locations=Zurich%2C+CH" target="_blank">Job openings (we accept unsolicited applications)</a></li>
-        </ul>
-    </div>
+        <div class="main">
+            <!-- Sidebar: Contact -->
+            <div class="sidebar">
+                <calcite-card>
+                    <span slot="heading" class="card-title">Let's keep in touch!</span>
+                    <a href="https://arcg.is/1fCWHi2" target="_blank">
+                        <img class="qr-code" src="./survey-qr-code.png" alt="Contact form QR code">
+                    </a>
+                    <ul class="contact-links">
+                        <li><a href="https://www.esri.com/en-us/about/about-esri/zurich-rd" target="_blank">R&D Center homepage</a></li>
+                        <li><a href="https://www.esri.com/en-us/about/careers/job-search?locations=Zurich%2C+CH" target="_blank">Job openings <span class="secondary">(unsolicited OK)</span></a></li>
+                    </ul>
+                </calcite-card>
+            </div>
 
-    <div class="category">
-        ArcGIS Maps SDK Javascript
-        <ul class="links">
-            <div><a href="https://developers.arcgis.com/javascript/latest/" target="_blank">Product page</a> <a href="https://developers.arcgis.com/javascript/latest/sample-code/" target="_blank">(samples)</a></div>
-            <div><a href="https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=fe9c4a5d5ec8437ba598d659bf514f64" target="_blank">Berlin (architecture visualization)</a></div>
-            <div><a href="https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=f466d464304e46d290984fc5206cedf9" target="_blank">Frankfurt (IntegratedMeshLayer)</a></div>
-            <div><a href="https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=bbe7f00a0e6b47a2b6344a2dc242fad9" target="_blank">Munich (IntegratedMeshLayer)</a></div>
-            <div><a href="https://developers.arcgis.com/javascript/latest/sample-code/layers-scenelayer-edges/live/" target="_blank">San Francisco (sketch rendering, urban viz)</a></div>
-            <div><a href="https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=543648a92446497db8a92c06ce1ad0b1" target="_blank">Christchurch (BuildingSceneLayer, slice tool)</a></div>
-            <div><a href="https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=113775c756924930ba580815ce8f0d49" target="_blank">Hawaii (RasterImageLayer, SciVis)</a></div>
-            <div><a href="https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=668686ffb1f2419c8d05dd65f406f496" target="_blank">Netherlands (VoxelLayer, SciVis)</a></div>
-            <div><a href="https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=4211bb14e7374366be9d964918ee2e5d" target="_blank">Utrecht (Realistic rendering, flood analysis)</a></div>
-            <div><a href="https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=2e0b4ceaba2d4ebb9f8022cb7632b3c6" target="_blank">Laax (ski resort use case)</a></div>
-            <div><a href="https://codepen.io/dkoerner/pen/rNQzbMr?editors=1000" target="_blank">API: tree generation codepen</a></div>
-            <div><a href="https://www.arcgis.com/apps/dashboards/bda7594740fd40299423467b48e9ecf6" target="_blank">dashboards</a></div>
-            <div><a href="https://realtimegis.esri.com/demosite/mpgsviewer/arcgis-badouzi-3dgs.html" target="_blank">custom rendering, gaussian splats</a></div>
-            <div><a href="https://mpiloukvm.esri.com/website/hdle/arcgis-hdle.html" target="_blank">custom rendering, gaussian splats (VPN required)</a></div>
-            <div><a href="https://zurich.maps.arcgis.com/apps/360vr/index.html?id=d088b1860bf84bd7a1654fa0c51f749d" target="_blank">360 VR</a></div>
-            <div><a href="https://www.maps.com/" target="_blank">maps.com (collection of interesting maps)</a></div>
-            <div><a href="https://ralucanicola.github.io/JSAPI_demos/" target="_blank">Collection of nice custom apps</a></div>
-            <div><a href="https://hub.arcgis.com/pages/gallery" target="_blank">ArcGIS Hub</a></div>
-        </ul>
-    </div>
+            <!-- Product cards: 2x2 grid -->
+            <div class="product-grid">
 
-    <div class="category">
-        ArcGIS Urban
-        <ul class="links">
-            <li><a href="https://urban.arcgis.com/" target="_blank">ArcGIS Urban Product Page</a></li>
-            <li><a href="https://urban.arcgis.com/?id=e7c528416e9f46dd91717849d641459a" target="_blank">Zurich (needs login - no editing)</a></li>
-            <li><a href="https://urban.arcgis.com/?id=abfeec3b968b4592bbabccd1e87685d6" target="_blank">Boston (needs login - with editing)</a></li>
-        </ul>
+                <!-- ArcGIS Maps SDK for JavaScript -->
+                <div class="product-card">
+                    <calcite-card>
+                        <span slot="heading" class="card-title">ArcGIS Maps SDK for JavaScript</span>
+                        <div class="thumb-grid">
+                            <a class="thumb-item" href="https://developers.arcgis.com/javascript/latest/" target="_blank">
+                                <img src="./thumbnails/jsapi-product.svg" alt="Product page">
+                                <span class="thumb-label">Product page</span>
+                            </a>
+                            <a class="thumb-item" href="https://developers.arcgis.com/javascript/latest/sample-code/" target="_blank">
+                                <img src="./thumbnails/jsapi-samples.svg" alt="Samples">
+                                <span class="thumb-label">Samples</span>
+                            </a>
+                            <a class="thumb-item" href="https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=fe9c4a5d5ec8437ba598d659bf514f64" target="_blank">
+                                <img src="./thumbnails/jsapi-berlin.svg" alt="Berlin">
+                                <span class="thumb-label">Berlin</span>
+                            </a>
+                            <a class="thumb-item" href="https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=f466d464304e46d290984fc5206cedf9" target="_blank">
+                                <img src="./thumbnails/jsapi-frankfurt.svg" alt="Frankfurt">
+                                <span class="thumb-label">Frankfurt</span>
+                            </a>
+                            <a class="thumb-item" href="https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=bbe7f00a0e6b47a2b6344a2dc242fad9" target="_blank">
+                                <img src="./thumbnails/jsapi-munich.svg" alt="Munich">
+                                <span class="thumb-label">Munich</span>
+                            </a>
+                            <a class="thumb-item" href="https://developers.arcgis.com/javascript/latest/sample-code/layers-scenelayer-edges/live/" target="_blank">
+                                <img src="./thumbnails/jsapi-sanfrancisco.svg" alt="San Francisco">
+                                <span class="thumb-label">San Francisco</span>
+                            </a>
+                            <a class="thumb-item" href="https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=543648a92446497db8a92c06ce1ad0b1" target="_blank">
+                                <img src="./thumbnails/jsapi-christchurch.svg" alt="Christchurch">
+                                <span class="thumb-label">Christchurch</span>
+                            </a>
+                            <a class="thumb-item" href="https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=113775c756924930ba580815ce8f0d49" target="_blank">
+                                <img src="./thumbnails/jsapi-hawaii.svg" alt="Hawaii">
+                                <span class="thumb-label">Hawaii</span>
+                            </a>
+                            <a class="thumb-item" href="https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=668686ffb1f2419c8d05dd65f406f496" target="_blank">
+                                <img src="./thumbnails/jsapi-netherlands.svg" alt="Netherlands">
+                                <span class="thumb-label">Netherlands</span>
+                            </a>
+                            <a class="thumb-item" href="https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=4211bb14e7374366be9d964918ee2e5d" target="_blank">
+                                <img src="./thumbnails/jsapi-utrecht.svg" alt="Utrecht">
+                                <span class="thumb-label">Utrecht</span>
+                            </a>
+                            <a class="thumb-item" href="https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=2e0b4ceaba2d4ebb9f8022cb7632b3c6" target="_blank">
+                                <img src="./thumbnails/jsapi-laax.svg" alt="Laax">
+                                <span class="thumb-label">Laax</span>
+                            </a>
+                            <a class="thumb-item" href="https://codepen.io/dkoerner/pen/rNQzbMr?editors=1000" target="_blank">
+                                <img src="./thumbnails/jsapi-trees.svg" alt="Tree generation">
+                                <span class="thumb-label">Tree generation</span>
+                            </a>
+                            <a class="thumb-item" href="https://www.arcgis.com/apps/dashboards/bda7594740fd40299423467b48e9ecf6" target="_blank">
+                                <img src="./thumbnails/jsapi-dashboards.svg" alt="Dashboards">
+                                <span class="thumb-label">Dashboards</span>
+                            </a>
+                            <a class="thumb-item" href="https://realtimegis.esri.com/demosite/mpgsviewer/arcgis-badouzi-3dgs.html" target="_blank">
+                                <img src="./thumbnails/jsapi-splats.svg" alt="Gaussian splats">
+                                <span class="thumb-label">Gaussian splats</span>
+                            </a>
+                            <a class="thumb-item" href="https://mpiloukvm.esri.com/website/hdle/arcgis-hdle.html" target="_blank">
+                                <img src="./thumbnails/jsapi-splats-vpn.svg" alt="Gaussian splats (VPN)">
+                                <span class="thumb-label">Gaussian splats (VPN)</span>
+                            </a>
+                            <a class="thumb-item" href="https://zurich.maps.arcgis.com/apps/360vr/index.html?id=d088b1860bf84bd7a1654fa0c51f749d" target="_blank">
+                                <img src="./thumbnails/jsapi-360vr.svg" alt="360 VR">
+                                <span class="thumb-label">360 VR</span>
+                            </a>
+                            <a class="thumb-item" href="https://www.maps.com/" target="_blank">
+                                <img src="./thumbnails/jsapi-maps.svg" alt="maps.com">
+                                <span class="thumb-label">maps.com</span>
+                            </a>
+                            <a class="thumb-item" href="https://ralucanicola.github.io/JSAPI_demos/" target="_blank">
+                                <img src="./thumbnails/jsapi-custom-apps.svg" alt="Custom apps">
+                                <span class="thumb-label">Custom apps</span>
+                            </a>
+                            <a class="thumb-item" href="https://hub.arcgis.com/pages/gallery" target="_blank">
+                                <img src="./thumbnails/jsapi-hub.svg" alt="ArcGIS Hub">
+                                <span class="thumb-label">ArcGIS Hub</span>
+                            </a>
+                        </div>
+                    </calcite-card>
+                </div>
+
+                <!-- ArcGIS Urban -->
+                <div class="product-card">
+                    <calcite-card>
+                        <span slot="heading" class="card-title">ArcGIS Urban</span>
+                        <div class="thumb-grid">
+                            <a class="thumb-item" href="https://urban.arcgis.com/" target="_blank">
+                                <img src="./thumbnails/urban-product.svg" alt="Product page">
+                                <span class="thumb-label">Product page</span>
+                            </a>
+                            <a class="thumb-item" href="https://urban.arcgis.com/?id=e7c528416e9f46dd91717849d641459a" target="_blank">
+                                <img src="./thumbnails/urban-zurich.svg" alt="Zurich">
+                                <span class="thumb-label">Zurich</span>
+                            </a>
+                            <a class="thumb-item" href="https://urban.arcgis.com/?id=abfeec3b968b4592bbabccd1e87685d6" target="_blank">
+                                <img src="./thumbnails/urban-boston.svg" alt="Boston">
+                                <span class="thumb-label">Boston</span>
+                            </a>
+                        </div>
+                    </calcite-card>
+                </div>
+
+                <!-- ArcGIS CityEngine -->
+                <div class="product-card">
+                    <calcite-card>
+                        <span slot="heading" class="card-title">ArcGIS CityEngine</span>
+                        <div class="empty-state">Add links here</div>
+                    </calcite-card>
+                </div>
+
+                <!-- ArcGIS XR -->
+                <div class="product-card">
+                    <calcite-card>
+                        <span slot="heading" class="card-title">ArcGIS XR</span>
+                        <div class="empty-state">Add links here</div>
+                    </calcite-card>
+                </div>
+
+            </div>
+        </div>
     </div>
 </body>
 </html>
